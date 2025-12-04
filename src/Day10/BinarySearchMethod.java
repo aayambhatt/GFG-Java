@@ -8,5 +8,9 @@ public class BinarySearchMethod {
         Arrays.sort(arr);
         System.out.println("Sorted Array: " + Arrays.toString(arr));
 
+        int keyValue = 8;
+
+        System.out.println(keyValue + " found at index " + Arrays.binarySearch(arr, keyValue));
+
     }
 }
