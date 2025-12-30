@@ -49,18 +49,32 @@ class Developer extends Employee{
     }
 }
 
+class Manager extends Employee {
+
+    private int teamSize;
+
+    Manager(String name, int salary, int teamSize) {
+        super(name, salary);
+        this.teamSize = teamSize;
+    }
+
+    @Override
+    public void printInfo() {
+        super.printInfo();
+        System.out.println("Team size: " + teamSize);
+    }
+}
+
+
 public class EmployeeToDeveloper {
     public static void main(String[] args) {
-        Employee e = new Employee("Aayam", 50000);
-        e.printInfo();
+        // reference type is Employee, object type is developer
+        Employee e1 = new Developer("Aaryan", 85000, "Java");
+        Employee e2 = new Manager("Rohit", 120000, 10);
 
-        e.setSalary(60000);
-        e.printInfo();
-
-        e.setSalary(-1000); // should NOT update
-        e.printInfo();
-
-        Developer d = new Developer("Aaryan", 85000, "Java");
-        d.printInfo();
+        e1.printInfo();
+        System.out.println("-----");
+        e2.printInfo();
     }
+
 }
