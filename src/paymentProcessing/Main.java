@@ -2,25 +2,41 @@ package paymentProcessing;
 
 public class Main {
     public static void main(String[] args) {
-
-        PaymentProcessor<Integer> payByAmount = (amount) -> {
-            if (amount == null || amount <= 0) {
+        // Lambda for credit card payments
+        PaymentProcessor creditCardProcessor = (request) -> {
+            if (request.getAmount() <= 0) {
                 throw new InvalidPaymentException("Amount must be greater than zero");
             }
-            System.out.println("₹" + amount + " received via cash");
-        };
-
-        PaymentProcessor<String> payByUPI = (upiId) -> {
-            if (upiId == null || upiId.trim().isEmpty()) {
-                throw new InvalidPaymentException("Invalid UPI ID");
+            if (request.getPaymentMethod() == null || request.getPaymentMethod().trim().isEmpty()) {
+                throw new InvalidPaymentException("Payment method missing");
             }
-            System.out.println("UPI ID " + upiId + " received payment");
+            System.out.println("Credit Card Payment for user: " + request.getUserId() +
+                    ", amount: " + request.getAmount() +
+                    ", method: " + request.getPaymentMethod());
         };
 
-        PaymentService.executePayment(payByAmount, 500);
-        PaymentService.executePayment(payByAmount, -10);
+        // Lambda for UPI payments
+        PaymentProcessor upiProcessor = (request) -> {
+            if (request.getAmount() <= 0) {
+                throw new InvalidPaymentException("Amount must be greater than zero");
+            }
+            if (request.getPaymentMethod() == null || request.getPaymentMethod().trim().isEmpty()) {
+                throw new InvalidPaymentException("Payment method missing");
+            }
+            System.out.println("UPI Payment for user: " + request.getUserId() +
+                    ", amount: " + request.getAmount() +
+                    ", UPI ID: " + request.getPaymentMethod());
+        };
 
-        PaymentService.executePayment(payByUPI, "abc@upi");
-        PaymentService.executePayment(payByUPI, " ");
+        // Execute payments
+        PaymentRequest creditPayment = new PaymentRequest("Aayam", 500, "Visa-1234");
+        PaymentRequest upiPayment = new PaymentRequest("Aaryan", 1000, "HSBC12345IX");
+
+        PaymentService.executePayment(creditCardProcessor, creditPayment);
+        PaymentService.executePayment(upiProcessor, upiPayment);
+
+        // Example of failing payment
+        PaymentRequest invalidPayment = new PaymentRequest("Rohit", -100, "");
+        PaymentService.executePayment(creditCardProcessor, invalidPayment);
     }
 }

@@ -1,5 +1,5 @@
 package paymentProcessing;
 
-public interface PaymentProcessor<T> {
-    void process(T details);
+public interface PaymentProcessor {
+    void process(PaymentRequest details);
 }
